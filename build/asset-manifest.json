@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/rachel-liaw/react_canvas/static/css/main.eeea64f6.css",
+    "main.js": "/rachel-liaw/react_canvas/static/js/main.c4f9253d.js",
+    "static/js/787.095fb968.chunk.js": "/rachel-liaw/react_canvas/static/js/787.095fb968.chunk.js",
+    "index.html": "/rachel-liaw/react_canvas/index.html",
+    "main.eeea64f6.css.map": "/rachel-liaw/react_canvas/static/css/main.eeea64f6.css.map",
+    "main.c4f9253d.js.map": "/rachel-liaw/react_canvas/static/js/main.c4f9253d.js.map",
+    "787.095fb968.chunk.js.map": "/rachel-liaw/react_canvas/static/js/787.095fb968.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.eeea64f6.css",
+    "static/js/main.c4f9253d.js"
+  ]
+}
