@@ -1,6 +1,13 @@
+import React, {useEffect} from 'react';
 import NewYearCanvas from './NewYearCanvas';
+import ReactGA from 'react-ga';
 
 function App() {
+
+  useEffect(()=>{
+    ReactGA.pageview(window.location.pathname);
+  },[])
+
   const bgImages = [
     {
       alt:'bg_2022newyear_01.png',
@@ -30,7 +37,6 @@ function App() {
   return (
     <div className="App">
       <NewYearCanvas bgImages={bgImages} stickers={stickers}/>
-      
     </div>
   );
 }

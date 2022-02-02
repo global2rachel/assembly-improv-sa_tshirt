@@ -2,7 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
+import ReactGA from 'react-ga';
 
+ReactGA.initialize(process.env.REACT_APP_GA_ID)
 
 ReactDOM.render(
   <React.StrictMode>

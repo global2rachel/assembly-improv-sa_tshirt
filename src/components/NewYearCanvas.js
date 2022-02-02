@@ -58,6 +58,7 @@ const NewYearCanvas = (props)=>{
         }
     }
 
+
     useEffect(()=>{
         let canvasWidth = windowSize.isMobile ? document.querySelector('.mat_space').getBoundingClientRect().width : 500;
 
@@ -76,7 +77,6 @@ const NewYearCanvas = (props)=>{
         });
 
         let language = navigator.language.toLowerCase() 
-        console.log(language)
         setLanguage(`${language === 'zh-tw'? 'zh-tw':'en'}`)
         initDeleteIcon()
         
@@ -483,7 +483,7 @@ const NewYearCanvas = (props)=>{
                                             data-bs-target="#exampleModal">
                                             {renderText('btn_send_top')}
                                         </button>
-                                        <button onClick={()=>setOrder('back')} type="button" className="btn_s ms-2" data-bs-toggle="modal"
+                                        <button onClick={()=>setOrder('bottom')} type="button" className="btn_s ms-2" data-bs-toggle="modal"
                                             data-bs-target="#exampleModal">
                                             {renderText('btn_send_bottom')}
                                         </button>
