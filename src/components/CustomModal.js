@@ -5,19 +5,23 @@ import {Modal} from "react-bootstrap";
 const CustomModal = (props)=>{
 
   const renderSaveButton = ()=>{
+
+    const html = (isDisabled)=>{
+      return (
+        <button onClick={props.addPhoto} type="button" className="btn btn-primary" disabled={isDisabled}
+    data-bs-dismiss="modal">{props.saveText}</button>
+      )
+    } 
+
     if(!props.isSaveDisabled) return (
-      <button onClick={props.addPhoto} type="button" className="btn btn-primary"
-      data-bs-dismiss="modal">Save changes</button>
+      html(false)
     )
+
     return (
-      <div
-          className="tooltipwrapper position-relative"
-        >
-            <span className="tooltiptext"
-              >Please Crop first</span>
+      <div className="tooltipwrapper position-relative">
+            <span className="tooltiptext">{props.tooptipText}</span>
           
-            <button onClick={props.addPhoto} type="button" className="btn btn-primary" disabled
-                        data-bs-dismiss="modal" data-bs-toggle="tooltip" data-bs-placement="top" title="Tooltip on top">Save changes</button>
+            {html(true)}
       </div>
          
     )
@@ -35,7 +39,7 @@ const CustomModal = (props)=>{
         </Modal.Body>
         <Modal.Footer>
              <button onClick={props.resetModal} type="button" className="btn btn-secondary"
-                        data-bs-dismiss="modal">Reset</button>
+                        data-bs-dismiss="modal">{props.resetText}</button>
             
             {renderSaveButton()}
            

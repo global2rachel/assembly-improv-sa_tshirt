@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/rachel-liaw/react_canvas/static/css/main.eeea64f6.css",
-    "main.js": "/rachel-liaw/react_canvas/static/js/main.c4f9253d.js",
-    "static/js/787.095fb968.chunk.js": "/rachel-liaw/react_canvas/static/js/787.095fb968.chunk.js",
-    "index.html": "/rachel-liaw/react_canvas/index.html",
-    "main.eeea64f6.css.map": "/rachel-liaw/react_canvas/static/css/main.eeea64f6.css.map",
-    "main.c4f9253d.js.map": "/rachel-liaw/react_canvas/static/js/main.c4f9253d.js.map",
-    "787.095fb968.chunk.js.map": "/rachel-liaw/react_canvas/static/js/787.095fb968.chunk.js.map"
+    "main.css": "./static/css/main.825e9d66.css",
+    "main.js": "./static/js/main.deef3d48.js",
+    "static/js/787.095fb968.chunk.js": "./static/js/787.095fb968.chunk.js",
+    "index.html": "./index.html",
+    "main.825e9d66.css.map": "./static/css/main.825e9d66.css.map",
+    "main.deef3d48.js.map": "./static/js/main.deef3d48.js.map",
+    "787.095fb968.chunk.js.map": "./static/js/787.095fb968.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.eeea64f6.css",
-    "static/js/main.c4f9253d.js"
+    "static/css/main.825e9d66.css",
+    "static/js/main.deef3d48.js"
   ]
 }

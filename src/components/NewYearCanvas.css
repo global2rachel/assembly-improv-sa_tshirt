@@ -80,6 +80,18 @@ p {
   border-radius: 4px;
 }
 
+.btn_s {
+  background-color: white;
+  border: 1px solid #004a13 !important;
+  font-weight: 400;
+  color: #004a13;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: 38px;
+  border: none;
+  border-radius: 4px;
+}
+
 .btn_g {
   background-color: lightgray;
   font-weight: 400;
@@ -699,4 +711,10 @@ p {
   border-width: 5px;
   border-style: solid;
   border-color: #d3d5db transparent transparent transparent;
+}
+
+.sticker {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
 }
