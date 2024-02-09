@@ -17,8 +17,7 @@
 body {
   background: #a60321;
   color: #1b2440;
-  font-family: "Josefin Sans", sans-serif;
-  font-family: "Noto Sans TC", sans-serif;
+  font-family: 'Noto Sans TC', 'Open Sans', sans-serif;
 }
 
 input:focus {
@@ -41,13 +40,14 @@ h1 {
 }
 
 h2 {
-  font-size: 3.5rem;
+  font-size: 2rem;
   color: #f2b705;
+  margin-bottom: 0;
 }
 
 @media (max-width: 768px) {
   h2 {
-    font-size: 2.8rem;
+    font-size: 1rem;
   }
 }
 
@@ -163,8 +163,7 @@ p {
 
 .logo_wrap h2 {
   color: #a60321;
-  margin-right: 0.5rem;
-  margin-left: 0.5rem;
+  text-align: center;
 }
 
 .mat_canvas {

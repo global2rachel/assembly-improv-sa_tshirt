@@ -5,69 +5,41 @@ import './NewYearCanvas.css';
 import CustomModal from "./CustomModal";
 import {Form} from "react-bootstrap";
 import { useWindowSize } from "./WindowResize";
+import textByLan from "../text-translation.json";
 
 const NewYearCanvas = (props)=>{
-    const [language, setLanguage] = useState({})
-    const [canvas, setCanvas] = useState('')
-    const [canvasModal, setCanvasModal] = useState('')
-    const [uploadImage, setUploadImage] = useState('')
-    const [uploadClipPath, setUploadClipPath] = useState('')
-    const [isCropped, setIsCropped] = useState(false)
-    const [color, setColor] = useState('#000000')
-    const [show,setShow] = useState(false)
-    const [modalType,setModalType] = useState('')
-    const [modalTitle,setModalTitle] = useState('')
-    const handleShow = (type)=> {
-        setModalType(type)
-        type ==='bg' ? setModalTitle(renderText('btn_add_bg')):setModalTitle(renderText('btn_add_photo'))
-        setShow(true)
+    const [language, setLanguage] = useState({});
+    const [canvas, setCanvas] = useState('');
+    const [canvasModal, setCanvasModal] = useState('');
+    const [uploadImage, setUploadImage] = useState('');
+    const [uploadClipPath, setUploadClipPath] = useState('');
+    const [isCropped, setIsCropped] = useState(false);
+    const [color, setColor] = useState('#000000');
+    const [font, setFont] = useState('Noto Sans TC');
+    const [show,setShow] = useState(false);
+    const [modalType,setModalType] = useState('');
+    const [modalTitle,setModalTitle] = useState('');
+    const canvasDefaultWidth = 500;
+    const showModal = (type)=> {
+        setModalType(type);
+        type ==='bg' ? setModalTitle(renderText('btn_add_bg')):setModalTitle(renderText('btn_add_photo'));
+        setShow(true);
     }
     const handleClose = ()=> {
         setShow(false)
         resetCanvasModal()
     }
     const windowSize = useWindowSize();
-    const textByLan = {
-        'en':{
-            title: '2022 Tiger Year',
-            btn_add_photo: 'Add Photo',
-            btn_add_bg: 'Add Background',
-            btn_add_text: 'Add Text',
-            btn_reset: 'Reset',
-            btn_download: 'Download Picture',
-            modal_btn_save_change: 'Save Change',
-            modal_alert: 'Please Crop first',
-            btn_add_clip: 'Add Clip',
-            btn_clip_photo: 'Clip Photo',
-            btn_send_top: 'Send to Top',
-            btn_send_bottom: 'Send to Bottom',
-        },
-        'zh-tw':{
-            title: '2022 虎年好',
-            btn_add_photo: '新增照片',
-            btn_add_bg: '更換背景',
-            btn_add_text: '新增文字',
-            btn_reset: '重設',
-            btn_download: '下載圖片',
-            modal_btn_save_change: '確認',
-            modal_alert: '請先確定裁剪',
-            btn_add_clip: '裁剪',
-            btn_clip_photo: '確定裁剪',
-            btn_send_top: '移到最前',
-            btn_send_bottom: '移到最後',
-        }
-    }
-
 
     useEffect(()=>{
-        let canvasWidth = windowSize.isMobile ? document.querySelector('.mat_space').getBoundingClientRect().width : 500;
+        let canvasWidth = windowSize.isMobile ? document.querySelector('.mat_space').getBoundingClientRect().width : canvasDefaultWidth;
 
         const canvas = new fabric.Canvas('canvas', {
             width: canvasWidth,
             height: canvasWidth
         })
 
-        setCanvas(canvas)
+        setCanvas(canvas);
 
         fabric.Image.fromURL(props.bgImages[0].src, function (img) {
             img.scaleToWidth(canvas.width);
@@ -76,15 +48,15 @@ const NewYearCanvas = (props)=>{
             canvas.requestRenderAll();
         });
 
-        let language = navigator.language.toLowerCase() 
-        setLanguage(`${language === 'zh-tw'? 'zh-tw':'en'}`)
-        initDeleteIcon()
-        
+        let language = navigator.language.toLowerCase() ;
+        setLanguage(`${language === 'zh-tw'? 'zh-tw':'en'}`);
+        initDeleteIcon();
+
     }, [])
 
     useEffect(()=>{
 
-        if(!document.querySelector('.modal-body')) return 
+        if(!document.querySelector('.modal-body')) return
 
         let canvasWidth = windowSize.isMobile ? windowSize.width*0.8 : 400;
 
@@ -99,19 +71,16 @@ const NewYearCanvas = (props)=>{
     const setOrder = (order)=>{
         const obj = canvas.getActiveObject()
         if(!obj) return
-        if(order === 'top') obj.bringToFront()
+        if(order === 'top') obj.bringToFront();
         if(order === 'bottom') obj.sendToBack();
-
-
     }
 
-
+    // Customize Fabric Deletion Icon & functions
     const initDeleteIcon = ()=>{
          const deleteImg = document.createElement('img');
          deleteImg.src = './images/close-circle-outline.svg';
-         deleteImg.classList.add('deleteBtn')
-       
- 
+         deleteImg.classList.add('deleteBtn');
+
          const control = {
              x: 0.5,
              y: -0.5,
@@ -122,8 +91,8 @@ const NewYearCanvas = (props)=>{
              render: renderIcon(deleteImg),
              cornerSize: 24
          }
- 
-         fabric.Object.prototype.controls.deleteControl = new fabric.Control(control); 
+
+         fabric.Object.prototype.controls.deleteControl = new fabric.Control(control);
          fabric.Textbox.prototype.controls.deleteControl = new fabric.Control(control);
 
          function renderIcon(icon) {
@@ -137,29 +106,28 @@ const NewYearCanvas = (props)=>{
              }
          }
 
-         function deleteObject(eventData, transform) {    
+         function deleteObject(eventData, transform) {
             var target = transform.target;
             var canvas = target.canvas;
             canvas.remove(target);
             canvas.requestRenderAll();
         }
- 
+
     }
 
-   
-    const reset = ()=>{      
-        canvas.clear()
-       
+    const reset = ()=>{
+        canvas.clear();
+
         fabric.Image.fromURL(props.bgImages[0].src, function (img) {
             img.scaleToWidth(canvas.width);
             img.scaleToHeight(canvas.height);
             canvas.setBackgroundImage(img);
             canvas.requestRenderAll();
         });
-    } 
+    }
 
     const setBg = (src)=>{
-        if(!canvas) return 
+        if(!canvas) return ;
         fabric.Image.fromURL(src, function (img) {
             img.scaleToHeight(canvas.height);
             img.scaleToWidth(canvas.width);
@@ -168,44 +136,38 @@ const NewYearCanvas = (props)=>{
             canvas.requestRenderAll();
         });
     }
-        
+
     const renderBgImages = ()=>{
         return props.bgImages.map(image=>{
             return (
                 <img onClick={()=>setBg(image.src)} role="button" key={image.alt} src={image.src} className="img-thumbnail w-25" alt={image.alt} />
             )
         })
-
     }
 
     const renderStickers = ()=>{
         return props.stickers.map(image=>{
             return (
-                <img onClick={()=>addPhoto(image.src)} role="button" key={image.alt} src={image.src} className="img-thumbnail sticker" alt={image.alt} />
+                <img onClick={()=>addSticket(image.src)} role="button" key={image.alt} src={image.src} className="img-thumbnail sticker" alt={image.alt} />
             )
         })
-
     }
 
-
-
-    const output = ()=>{
-        var image = canvas.toDataURL("image/png").replace("image/png",
-                "image/octet-stream"
-            ); 
-            const a = document.createElement('a')
-            a.href = image
-            a.download = `newyear2020.jpeg`
-            document.body.appendChild(a)
-            a.click()
-            document.body.removeChild(a)
+    const downloadResult = ()=>{
+        const image = canvas.toDataURL({multiplier: 5});
+            const a = document.createElement('a');
+            a.href = image;
+            a.download = `newyear2024.jpeg`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
     }
 
     const uploadPhoto = (e)=>{
             const uploadImageTmp = new Image();
             uploadImageTmp.src = URL.createObjectURL(e.target.files[0]);
             uploadImageTmp.onload = function () {
-                const image = new fabric.Image(uploadImageTmp);                    
+                const image = new fabric.Image(uploadImageTmp);
                 image.set({
                     left: 0,
                     top: 0,
@@ -220,15 +182,13 @@ const NewYearCanvas = (props)=>{
                 image.scaleToWidth(canvasModal.width);
                 canvasModal.setHeight(image.height*image.scaleY)
 
-
-                setUploadImage(image)          
+                setUploadImage(image)
                 canvasModal.add(image).setActiveObject(image).renderAll();
-                
-            } 
+            }
     }
 
     const addClip = ()=>{
-        let userClipPath
+        let userClipPath;
         if(uploadClipPath){
             setUploadClipPath('')
             canvasModal.getObjects().forEach(obj=>{
@@ -236,10 +196,9 @@ const NewYearCanvas = (props)=>{
                     canvasModal.remove(obj)
                 }
             })
-            
+
         }
         if(modalType === 'photo'){
-          
             userClipPath = new fabric.Circle({
                 top: uploadImage.getBoundingRect().top,
                 left: uploadImage.getBoundingRect().left,
@@ -270,7 +229,7 @@ const NewYearCanvas = (props)=>{
         }
 
         canvasModal.add(userClipPath).setActiveObject(userClipPath).renderAll();
-        setUploadClipPath(userClipPath)
+        setUploadClipPath(userClipPath);
     }
 
     const clipImage = ()=>{
@@ -306,15 +265,12 @@ const NewYearCanvas = (props)=>{
             });
         }
 
-        
-
-        
         setIsCropped(true)
         canvasModal.remove(uploadClipPath)
         canvasModal.renderAll()
     }
 
-    const addPhoto = (stickerSrc)=>{
+    const addPhoto = ()=>{
         if (uploadClipPath && isCropped) {
             uploadImage.set({
                 top: -uploadClipPath.getBoundingRect().top,
@@ -333,7 +289,7 @@ const NewYearCanvas = (props)=>{
             const modifiedImage = canvasModal.toDataURL("image/png").replace("image/png",
                 "image/octet-stream");
             const pasteImage = new Image();
-            if(modalType==='bg') setBg(modifiedImage)
+            if(modalType==='bg') setBg(modifiedImage);
             if(modalType==='photo'){
                 pasteImage.src = modifiedImage;
                 pasteImage.onload = function () {
@@ -342,38 +298,39 @@ const NewYearCanvas = (props)=>{
                         left: 100,
                         top: 60,
                         objectCaching: false,
+
                     });
+                    // image.scaleToWidth();
                     canvas.add(image).setActiveObject(image).renderAll();
-                    
+
                 }
             }
-        }
-
-        if(stickerSrc){
-            const pasteImage = new Image();
-
-            pasteImage.src = stickerSrc;
-                pasteImage.onload = function () {
-                    const image = new fabric.Image(pasteImage);
-                    image.set({
-                        left: 100,
-                        top: 60,
-                        objectCaching: false,
-                    });
-                    canvas.add(image).setActiveObject(image).renderAll();
-                }
-
         }
 
         if(canvasModal){
             resetCanvasModal()
             setShow(false)
         }
-            
 
-           
+    }
 
-        
+    const addSticket = (stickerSrc) =>{
+        if(stickerSrc){
+            const pasteImage = new Image();
+
+            pasteImage.src = stickerSrc;
+            pasteImage.onload = function () {
+                const image = new fabric.Image(pasteImage);
+                image.set({
+                    left: 20,
+                    top: 60,
+                    objectCaching: false,
+                });
+                image.scaleToWidth(canvasDefaultWidth * 0.8);
+                canvas.add(image).setActiveObject(image).renderAll();
+            }
+
+        }
     }
 
     const resetCanvasModal= ()=>{
@@ -393,28 +350,28 @@ const NewYearCanvas = (props)=>{
 
     const addText = ()=>{
         const text = document.querySelector('#text_input').value
-        
+
             const textbox = new fabric.Textbox(text, {
                 left: 50,
                 top: 50,
                 width: 100,
-                fontSize: 20, 
-                fontWeight: 800, // 
-                // fill: colorInput, // 
+                fontSize: 20,
+                fontWeight: 800, //
+                // fill: colorInput, //
                 fill: color, //
-                // fontStyle: 'italic', 
-                fontFamily: 'Noto Sans TC', 
-                // stroke: 'green', 
+                // fontStyle: 'italic',
+                fontFamily: font,
+                // stroke: 'green',
                 // strokeWidth: 3,
                 hasControls: true,
                 borderColor: "orange",
-                editingBorderColor: "blue", 
+                editingBorderColor: "blue",
             });
             canvas.add(textbox).setActiveObject(textbox)
     }
 
     const renderClipIcon = ()=>{
-      
+
         if(!uploadImage) return
         else if(uploadImage && uploadClipPath) return(
            <>
@@ -449,32 +406,30 @@ const NewYearCanvas = (props)=>{
     }
 
     const renderText = (key)=>{
-        if(!Object.keys(language).length) return 
-        return textByLan[language][key]
+        if (!Object.keys(language).length) return;
+        return textByLan[language][key];
     }
-
-
 
         return(
             <div>
                 <main className="custom container-fluid position-relative">
                     <div className="custom_page d-flex justify-content-center flex-wrap">
                     <div className="d-flex flex-wrap">
-                        <div className="col-md-8 col-12 mat_space d-flex align-items-center justify-content-center">    
-                            <canvas id="canvas"></canvas>                             
+                        <div className="col-md-8 col-12 mat_space d-flex align-items-center justify-content-center">
+                            <canvas id="canvas"></canvas>
                         </div>
                         <div className={rightSecClass()} style={{height:'500px'}}>
                             <div className={thumbnailClass()}>
                                 {renderBgImages()}
                             </div>
                             <div className="d-flex flex-column align-items-start mt-4 h-50">
-                                
+
                                 <div className="mt-2 mb-auto">
-                                    <button onClick={()=>handleShow('photo')} type="button" className="btn_f" data-bs-toggle="modal"
+                                    <button onClick={()=>showModal('photo')} type="button" className="btn_f" data-bs-toggle="modal"
                                         data-bs-target="#exampleModal">
                                         {renderText('btn_add_photo')}
                                     </button>
-                                    <button onClick={()=>handleShow('bg')} type="button" className="btn_f ms-2" data-bs-toggle="modal"
+                                    <button onClick={()=>showModal('bg')} type="button" className="btn_f ms-2" data-bs-toggle="modal"
                                         data-bs-target="#exampleModal">
                                         {renderText('btn_add_bg')}
                                     </button>
@@ -492,40 +447,48 @@ const NewYearCanvas = (props)=>{
                                     <div className="mt-2">
                                         {renderStickers()}
                                     </div>
-                                    
-                                    <div className="d-flex justify-content-start mt-3">
-                                        <input type="color" value={color} onChange={(e)=>setColor(e.target.value)}
-                                            style={{height:'35px',width: '35px'}} className="mx-2"/>
-                                         <input type="text" className="col w-75 me-2" id="text_input" />
-                                        <button onClick={addText} type="button" className="btn_f" id="add_text_btn">{renderText('btn_add_text')}</button>
-                                      
+
+                                    <div className="mt-3">
+                                        <div className="d-flex mb-1">
+                                            <select name="cars" id="font" onChange={(e)=>setFont(e.target.value)}>
+                                                <option value="Noto Sans TC">Noto Sans TC</option>
+                                                <option value="Noto Serif TC">Noto Serif TC</option>
+                                            </select>
+                                            <input type="color" value={color} onChange={(e) => setColor(e.target.value)}
+                                                   style={{height: '35px', width: '35px'}} className="mx-2"/>
+                                        </div>
+                                        <div className="d-flex">
+                                            <input type="text" className="col w-75 me-2" id="text_input"/>
+                                            <button onClick={addText} type="button" className="btn_f"
+                                                    id="add_text_btn">{renderText('btn_add_text')}</button>
+                                        </div>
                                     </div>
-                                    
+
                                 </div>
+
                                 <div className="d-flex flex-wrap mt-2">
                                     <button onClick={reset} type="button" className="btn_g mt-2">{renderText('btn_reset')}</button>
-                                    <button onClick={output} className="btn_l ms-2 mt-2" type="button">{renderText('btn_download')}</button>
+                                    <button onClick={downloadResult} className="btn_l ms-2 mt-2" type="button">{renderText('btn_download')}</button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    
+
                     </div>
                     <div className="position-absolute d-flex align-items-end logo_wrap">
                         <h2>{renderText('title')}</h2>
                     </div>
                      <div className="text-center">
                         <a type="button" className="text-center mt-2 text-white" href="https://github.com/rachel-liaw" target="_blank" rel="noreferrer">Copyright
-                        © 2022 by Rachel
-                        Liaw</a>
+                        © 2024 by Global Rachel</a>
                     </div>
                 </main>
-                <CustomModal 
-                    show={show} 
-                    handleClose={handleClose} 
-                    resetModal={resetCanvasModal} 
-                    addPhoto={addPhoto} 
-                    title={modalTitle} 
+                <CustomModal
+                    show={show}
+                    handleClose={handleClose}
+                    resetModal={resetCanvasModal}
+                    addPhoto={addPhoto}
+                    title={modalTitle}
                     isSaveDisabled={uploadClipPath && !isCropped}
                     saveText={renderText('modal_btn_save_change')}
                     resetText={renderText('btn_reset')}
@@ -537,11 +500,11 @@ const NewYearCanvas = (props)=>{
                    <div>{renderClipIcon()}</div>
                    <canvas id="canvasModal" className="mx-auto"></canvas>
                 </CustomModal>
-                
+
             </div>
-            
+
         )
-    
+
 }
 
 
