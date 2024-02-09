@@ -1,0 +1,32 @@
+{
+  "en":{
+    "title": "Year of the Dragon 2024",
+    "btn_add_photo": "Add Photo",
+    "btn_add_bg": "Add Background",
+    "btn_add_text": "Add Text",
+    "btn_reset": "Reset",
+    "btn_download": "Download Picture",
+    "modal_btn_save_change": "Save Change",
+    "modal_alert": "Please Crop first",
+    "btn_add_clip": "Add Clip",
+    "btn_clip_photo": "Clip Photo",
+    "btn_send_top": "Send to Top",
+    "btn_send_bottom": "Send to Bottom",
+    "btn_select_font": "Select Font"
+  },
+  "zh-tw":{
+    "title": "2024龍年吉祥",
+    "btn_add_photo": "新增照片",
+    "btn_add_bg": "更換背景",
+    "btn_add_text": "新增文字",
+    "btn_reset": "重設",
+    "btn_download": "下載圖片",
+    "modal_btn_save_change": "確認",
+    "modal_alert": "請先確定裁剪",
+    "btn_add_clip": "裁剪",
+    "btn_clip_photo": "確定裁剪",
+    "btn_send_top": "移到最前",
+    "btn_send_bottom": "移到最後",
+    "btn_select_font": "選擇字體"
+  }
+}
