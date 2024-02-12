@@ -6,6 +6,7 @@ import CustomModal from "./CustomModal";
 import {Form} from "react-bootstrap";
 import { useWindowSize } from "./WindowResize";
 import textByLan from "../text-translation.json";
+import Footer from "./Footer";
 
 const NewYearCanvas = (props)=>{
     const [language, setLanguage] = useState({});
@@ -478,10 +479,7 @@ const NewYearCanvas = (props)=>{
                     <div className="position-absolute d-flex align-items-end logo_wrap">
                         <h2>{renderText('title')}</h2>
                     </div>
-                     <div className="text-center">
-                        <a type="button" className="text-center mt-2 text-white" href="https://github.com/rachel-liaw" target="_blank" rel="noreferrer">Copyright
-                        © 2024 by Global Rachel</a>
-                    </div>
+                     <Footer />
                 </main>
                 <CustomModal
                     show={show}
@@ -500,9 +498,7 @@ const NewYearCanvas = (props)=>{
                    <div>{renderClipIcon()}</div>
                    <canvas id="canvasModal" className="mx-auto"></canvas>
                 </CustomModal>
-
             </div>
-
         )
 
 }
