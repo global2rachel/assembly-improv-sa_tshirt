@@ -7,6 +7,10 @@ import {Form} from "react-bootstrap";
 import { useWindowSize } from "./WindowResize";
 import textByLan from "../text-translation.json";
 import Footer from "./Footer";
+import TshirtComponent from './assembly/tshirt';
+import LogoWhiteComponent from './assembly/LogoWhite';
+import { Canvg } from 'canvg';
+import { Button } from 'react-bootstrap';
 
 const NewYearCanvas = (props)=>{
     const [language, setLanguage] = useState({});
@@ -15,106 +19,45 @@ const NewYearCanvas = (props)=>{
     const [uploadImage, setUploadImage] = useState('');
     const [uploadClipPath, setUploadClipPath] = useState('');
     const [isCropped, setIsCropped] = useState(false);
+
     const [color, setColor] = useState('#000000');
-    const [font, setFont] = useState('Noto Sans TC');
+    const [colorName, setColorName] = useState('black');
+
     const [show,setShow] = useState(false);
+
+    const [logoType, setLogo] = useState(null);
+    const [logoSrc, setLogoSrc] = useState('');
+
     const [modalType,setModalType] = useState('');
     const [modalTitle,setModalTitle] = useState('');
-    const canvasDefaultWidth = 500;
+    
+    const [lightColor,setLightColor] = useState(null);
+    const [outlineColor,setOutlineColor] = useState(null);
+
+    const canvasDefaultWidth = 300;
     const showModal = (type)=> {
         setModalType(type);
         type ==='bg' ? setModalTitle(renderText('btn_add_bg')):setModalTitle(renderText('btn_add_photo'));
         setShow(true);
     }
     const handleClose = ()=> {
-        setShow(false)
-        resetCanvasModal()
+        setShow(false);
     }
     const windowSize = useWindowSize();
 
     useEffect(()=>{
-        let canvasWidth = windowSize.isMobile ? document.querySelector('.mat_space').getBoundingClientRect().width : canvasDefaultWidth;
 
-        const canvas = new fabric.Canvas('canvas', {
-            width: canvasWidth,
-            height: canvasWidth
-        })
+        // if(!document.querySelector('.modal-body')) return
 
-        setCanvas(canvas);
+        // let canvasWidth = windowSize.isMobile ? windowSize.width*0.8 : 400;
 
-        fabric.Image.fromURL(props.bgImages[0].src, function (img) {
-            img.scaleToWidth(canvas.width);
-            img.scaleToHeight(canvas.height);
-            canvas.setBackgroundImage(img);
-            canvas.requestRenderAll();
-        });
-
-        let language = navigator.language.toLowerCase() ;
-        setLanguage(`${language === 'zh-tw'? 'zh-tw':'en'}`);
-        initDeleteIcon();
-
-    }, [])
-
-    useEffect(()=>{
-
-        if(!document.querySelector('.modal-body')) return
-
-        let canvasWidth = windowSize.isMobile ? windowSize.width*0.8 : 400;
-
-        const canvasModal = new fabric.Canvas('canvasModal', {
-            width: canvasWidth,
-            height: canvasWidth,
-        })
-        setCanvasModal(canvasModal)
+        // const canvasModal = new fabric.Canvas('canvasModal', {
+        //     width: canvasWidth,
+        //     height: canvasWidth,
+        // })
+        // setCanvasModal(canvasModal)
 
     },[show, windowSize])
-
-    const setOrder = (order)=>{
-        const obj = canvas.getActiveObject()
-        if(!obj) return
-        if(order === 'top') obj.bringToFront();
-        if(order === 'bottom') obj.sendToBack();
-    }
-
-    // Customize Fabric Deletion Icon & functions
-    const initDeleteIcon = ()=>{
-         const deleteImg = document.createElement('img');
-         deleteImg.src = './images/close-circle-outline.svg';
-         deleteImg.classList.add('deleteBtn');
-
-         const control = {
-             x: 0.5,
-             y: -0.5,
-             offsetY: -16,
-             offsetX: 16,
-             cursorStyle: 'pointer',
-             mouseUpHandler: (eventData, transform)=>deleteObject(eventData, transform),
-             render: renderIcon(deleteImg),
-             cornerSize: 24
-         }
-
-         fabric.Object.prototype.controls.deleteControl = new fabric.Control(control);
-         fabric.Textbox.prototype.controls.deleteControl = new fabric.Control(control);
-
-         function renderIcon(icon) {
-             return function renderIcon(ctx, left, top, styleOverride, fabricObject) {
-                 var size = this.cornerSize;
-                 ctx.save();
-                 ctx.translate(left, top);
-                 ctx.rotate(fabric.util.degreesToRadians(fabricObject.angle));
-                 ctx.drawImage(icon, -size / 2, -size / 2, size, size);
-                 ctx.restore();
-             }
-         }
-
-         function deleteObject(eventData, transform) {
-            var target = transform.target;
-            var canvas = target.canvas;
-            canvas.remove(target);
-            canvas.requestRenderAll();
-        }
-
-    }
 
     const reset = ()=>{
         canvas.clear();
@@ -138,137 +81,75 @@ const NewYearCanvas = (props)=>{
         });
     }
 
-    const renderBgImages = ()=>{
-        return props.bgImages.map(image=>{
+    const renderLogos = ()=>{
+        return props.stickers.map(image=>{
             return (
-                <img onClick={()=>setBg(image.src)} role="button" key={image.alt} src={image.src} className="img-thumbnail w-25" alt={image.alt} />
+                <img onClick={()=>setLogoAttribute(image)} role="button" key={image.alt} src={image.src} className="img-thumbnail sticker" alt={image.alt} />
             )
         })
     }
 
-    const renderStickers = ()=>{
-        return props.stickers.map(image=>{
-            return (
-                <img onClick={()=>addSticket(image.src)} role="button" key={image.alt} src={image.src} className="img-thumbnail sticker" alt={image.alt} />
-            )
-        })
+    const setLogoAttribute = (image)=>{
+        setLogo(image.alt);
+        setLogoSrc(image.src);
     }
 
     const downloadResult = ()=>{
+        const editedLogo = document.getElementById('edited_logo');
+
+        const copiedNode = editedLogo.cloneNode(true);
+        copiedNode.setAttribute('width', '2000'); 
+        document.body.appendChild(copiedNode);
+
+        // Serialize the SVG into a string
+            const svgData = new XMLSerializer().serializeToString(copiedNode);
+
+            // Create a canvas element
+            const canvas = document.createElement('canvas');
+            canvas.width = copiedNode.clientWidth;
+            canvas.height = copiedNode.clientHeight;
+
+            const ctx = canvas.getContext('2d');
+
+            // Initialize Canvg and render the SVG string onto the canvas
+        const renderSVG = async () => {
+            const canvgInstance = Canvg.fromString(ctx, svgData);
+            await canvgInstance.render();  // Wait for rendering to finish
+        };
+
+        // Call the function to render the SVG
+        renderSVG();
+
+
         const image = canvas.toDataURL({multiplier: 5});
-            const a = document.createElement('a');
-            a.href = image;
-            a.download = `newyear2024.jpeg`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
+        const a = document.createElement('a');
+        a.href = image;
+        a.download = `logo.png`;
+        document.body.appendChild(a);
+        a.click();
+
+        document.body.removeChild(a);
+        document.body.removeChild(copiedNode);
     }
 
     const uploadPhoto = (e)=>{
             const uploadImageTmp = new Image();
+            const imageContainer = document.getElementById('imageContainer');
             uploadImageTmp.src = URL.createObjectURL(e.target.files[0]);
             uploadImageTmp.onload = function () {
-                const image = new fabric.Image(uploadImageTmp);
-                image.set({
-                    left: 0,
-                    top: 0,
-                    clipPath: '',
-                    hasControls: false,
-                    lockMovementX: true,
-                    lockMovementY: true,
-                    "selectable": false,
-                    "evented": false
-                });
+                // const img = document.createElement('img');
+                // img.src = e.target.result; // Set the image source to the file content
+                uploadImageTmp.alt = 'Uploaded Image'; 
+                uploadImageTmp.style.width = '300px';
 
-                image.scaleToWidth(canvasModal.width);
-                canvasModal.setHeight(image.height*image.scaleY)
+                // Clear previous images
+                imageContainer.innerHTML = '';
 
-                setUploadImage(image)
-                canvasModal.add(image).setActiveObject(image).renderAll();
+                // Add the new image to the DOM
+                imageContainer.appendChild(uploadImageTmp);
+
+                setLogo('custom-file');
             }
-    }
-
-    const addClip = ()=>{
-        let userClipPath;
-        if(uploadClipPath){
-            setUploadClipPath('')
-            canvasModal.getObjects().forEach(obj=>{
-                if(obj.id === 'circleClip' ||obj.id === 'bgClip' ) {
-                    canvasModal.remove(obj)
-                }
-            })
-
-        }
-        if(modalType === 'photo'){
-            userClipPath = new fabric.Circle({
-                top: uploadImage.getBoundingRect().top,
-                left: uploadImage.getBoundingRect().left,
-                radius: 50,
-                width: 100,
-                height: 100,
-                fill: 'rgb(178, 178, 178, 0.4)',
-                id: 'circleClip',
-            })
-
-            userClipPath.setControlsVisibility({
-                mb: false,
-                ml: false,
-                mr: false,
-                mt: false
-            })
-        }
-
-        if(modalType === 'bg'){
-            userClipPath = new fabric.Rect({
-                top: uploadImage.getBoundingRect().top,
-                left: uploadImage.getBoundingRect().left,
-                width: 200,
-                height: 200,
-                fill: 'rgb(178, 178, 178, 0.4)',
-                id: 'bgClip',
-            })
-        }
-
-        canvasModal.add(userClipPath).setActiveObject(userClipPath).renderAll();
-        setUploadClipPath(userClipPath);
-    }
-
-    const clipImage = ()=>{
-        const imageCenter = {
-            top: uploadImage.getBoundingRect().top + uploadImage.height * uploadImage.scaleY / 2,
-            left: uploadImage.getBoundingRect().left + uploadImage.width * uploadImage.scaleX / 2,
-        }
-
-        if(modalType === 'photo'){
-            uploadImage.set({
-                clipPath: new fabric.Circle({
-                    radius: uploadClipPath.radius / uploadImage.scaleX * uploadClipPath.scaleX,
-                    top: (uploadClipPath.getBoundingRect().top - imageCenter
-                        .top) / uploadImage.scaleY,
-                    left: (uploadClipPath.getBoundingRect().left -
-                        imageCenter
-                        .left) / uploadImage.scaleX,
-                }),
-            });
-        }
-
-        if(modalType === 'bg'){
-            uploadImage.set({
-                clipPath: new fabric.Rect({
-                    width: uploadClipPath.width / uploadImage.scaleX * uploadClipPath.scaleX,
-                    height:uploadClipPath.height / uploadImage.scaleY * uploadClipPath.scaleY,
-                    top: (uploadClipPath.getBoundingRect().top - imageCenter
-                        .top) / uploadImage.scaleY,
-                    left: (uploadClipPath.getBoundingRect().left -
-                        imageCenter
-                        .left) / uploadImage.scaleX,
-                }),
-            });
-        }
-
-        setIsCropped(true)
-        canvasModal.remove(uploadClipPath)
-        canvasModal.renderAll()
     }
 
     const addPhoto = ()=>{
@@ -315,25 +196,6 @@ const NewYearCanvas = (props)=>{
 
     }
 
-    const addSticket = (stickerSrc) =>{
-        if(stickerSrc){
-            const pasteImage = new Image();
-
-            pasteImage.src = stickerSrc;
-            pasteImage.onload = function () {
-                const image = new fabric.Image(pasteImage);
-                image.set({
-                    left: 20,
-                    top: 60,
-                    objectCaching: false,
-                });
-                image.scaleToWidth(canvasDefaultWidth * 0.8);
-                canvas.add(image).setActiveObject(image).renderAll();
-            }
-
-        }
-    }
-
     const resetCanvasModal= ()=>{
         const upload = document.querySelector('#imageUpload')
         if(upload?.value) upload.value = ''
@@ -349,50 +211,13 @@ const NewYearCanvas = (props)=>{
 
     }
 
-    const addText = ()=>{
-        const text = document.querySelector('#text_input').value
-
-            const textbox = new fabric.Textbox(text, {
-                left: 50,
-                top: 50,
-                width: 100,
-                fontSize: 20,
-                fontWeight: 800, //
-                // fill: colorInput, //
-                fill: color, //
-                // fontStyle: 'italic',
-                fontFamily: font,
-                // stroke: 'green',
-                // strokeWidth: 3,
-                hasControls: true,
-                borderColor: "orange",
-                editingBorderColor: "blue",
-            });
-            canvas.add(textbox).setActiveObject(textbox)
-    }
-
-    const renderClipIcon = ()=>{
-
-        if(!uploadImage) return
-        else if(uploadImage && uploadClipPath) return(
-           <>
-            <button onClick={addClip} type="button" className="btn btn-light">{renderText('btn_add_clip')}</button>
-            <button onClick={clipImage} type="button" className="btn btn-light">{renderText('btn_clip_photo')}</button>
-           </>
-
-        )
-        else return(
-            <button onClick={addClip} type="button" className="btn btn-light">{renderText('btn_add_clip')}</button>
-        )
-    }
-
     const rightSecClass=()=>{
         let width =
                window.innerWidth ||
                 document.documentElement.clientWidth ||
                 document.body.clientWidth
         return (
-            `col-md-4 col-12 flex-column ${width > 767 ? 'my-auto' : 'mt-4'} px-2`
+            `col-md-4 col-12 flex-column ${width > 767 ? 'mt-5 pt-5' : 'mt-4'} px-2`
         )
     }
 
@@ -402,7 +227,7 @@ const NewYearCanvas = (props)=>{
                 document.documentElement.clientWidth ||
                 document.body.clientWidth
         return (
-            `d-flex  ${width > 767 ? '' : 'justify-content-center'}`
+            `d-flex  ${width > 767 ? '' : 'justify-content-center'} flex-wrap mt-3`
         )
     }
 
@@ -411,93 +236,129 @@ const NewYearCanvas = (props)=>{
         return textByLan[language][key];
     }
 
+    const renderTshirtColors = ()=>{
+        return props.colors.map((colorItem, index)=>{
+            return (
+                <div onClick={()=>setShirtColor(colorItem)} key={index} className="tshirt-color" style={{backgroundColor: colorItem.colorCode}}></div>
+            )
+        });
+    }
+
+    const setShirtColor = (colorItem)=>{
+        setColor(colorItem.colorCode);
+        setColorName(colorItem.colorName);
+    }
+
+    const resetLogo = ()=>{
+        setOutlineColor('#000000');
+        setLightColor('#000000');
+    }
+
+    const renderMockupLogos = ()=>{
+        if(!logoType || logoType === 'custom-file') return;
+        return (
+            <div className="position-absolute logo">
+                                            <img className="mockup-logo" src={logoSrc} alt="logo"></img>
+                                        </div>
+        )
+    }
+
         return(
             <div>
                 <main className="custom container-fluid position-relative">
                     <div className="custom_page d-flex justify-content-center flex-wrap">
-                    <div className="d-flex flex-wrap">
-                        <div className="col-md-8 col-12 mat_space d-flex align-items-center justify-content-center">
-                            <canvas id="canvas"></canvas>
-                        </div>
-                        <div className={rightSecClass()} style={{height:'500px'}}>
-                            <div className={thumbnailClass()}>
-                                {renderBgImages()}
+                        {/* Edit Board */}
+                        <div className="d-flex flex-wrap">
+                             {/* Left */}
+                            <div className="col-md-8 col-12 mat_space d-flex align-items-center justify-content-center">
+                                <div className="position-relative">
+                                    <TshirtComponent color={color}/>
+
+                                    { renderMockupLogos() }
+                                     
+                                    <div id="imageContainer" className="position-absolute logo"></div>
+                                </div>
                             </div>
-                            <div className="d-flex flex-column align-items-start mt-4 h-50">
+                            {/* Right */}
+                            <div className={rightSecClass()} style={{height:'500px'}}>
 
-                                <div className="mt-2 mb-auto">
-                                    <button onClick={()=>showModal('photo')} type="button" className="btn_f" data-bs-toggle="modal"
-                                        data-bs-target="#exampleModal">
-                                        {renderText('btn_add_photo')}
-                                    </button>
-                                    <button onClick={()=>showModal('bg')} type="button" className="btn_f ms-2" data-bs-toggle="modal"
-                                        data-bs-target="#exampleModal">
-                                        {renderText('btn_add_bg')}
-                                    </button>
-                                    <div className="mt-2">
-                                        <button onClick={()=>setOrder('top')} type="button" className="btn_s" data-bs-toggle="modal"
+                                <h3>Logo Type:</h3>
+                                <div className="mt-3">
+                                    {renderLogos()}
+                                    <button onClick={()=>showModal('photo')} type="button" className="btn_f mx-4" data-bs-toggle="modal"
                                             data-bs-target="#exampleModal">
-                                            {renderText('btn_send_top')}
-                                        </button>
-                                        <button onClick={()=>setOrder('bottom')} type="button" className="btn_s ms-2" data-bs-toggle="modal"
-                                            data-bs-target="#exampleModal">
-                                            {renderText('btn_send_bottom')}
-                                        </button>
-
-                                    </div>
-                                    <div className="mt-2">
-                                        {renderStickers()}
-                                    </div>
-
-                                    <div className="mt-3">
-                                        <div className="d-flex mb-1">
-                                            <select name="cars" id="font" onChange={(e)=>setFont(e.target.value)}>
-                                                <option value="Noto Sans TC">Noto Sans TC</option>
-                                                <option value="Noto Serif TC">Noto Serif TC</option>
-                                            </select>
-                                            <input type="color" value={color} onChange={(e) => setColor(e.target.value)}
-                                                   style={{height: '35px', width: '35px'}} className="mx-2"/>
-                                        </div>
-                                        <div className="d-flex">
-                                            <input type="text" className="col w-75 me-2" id="text_input"/>
-                                            <button onClick={addText} type="button" className="btn_f"
-                                                    id="add_text_btn">{renderText('btn_add_text')}</button>
-                                        </div>
-                                    </div>
-
+                                            Edit Logo
+                                    </button>
                                 </div>
 
-                                <div className="d-flex flex-wrap mt-2">
-                                    <button onClick={reset} type="button" className="btn_g mt-2">{renderText('btn_reset')}</button>
-                                    <button onClick={downloadResult} className="btn_l ms-2 mt-2" type="button">{renderText('btn_download')}</button>
+                                <div className="my-2">
+                                    <h3>Upload your logo:</h3>
+                                    <Form.Group  onChange={uploadPhoto} className="mt-3">
+                                        <Form.Control type="file" id="imageUpload" accept="image/*"/>
+                                    </Form.Group>
+                                </div>
+
+                                <h3 className="mb-2">T-shirt Color:</h3>
+                                <div className={thumbnailClass()}>
+                                    { renderTshirtColors() }
+                                </div>
+
+                                <div className="d-flex flex-column align-items-start mt-4">
+                                    <div>
+                                        <h3>Your Assembly Improv T-shirt Order</h3><br/>
+                                        T-shirt Color: {colorName} <br/>
+                                        Logo Name: {logoType}
+                                        <div className="d-flex flex-wrap mt-2">
+                                            <Button size ="lg" type="button" className="mt-2" target="_blank" href="https://docs.google.com/spreadsheets/d/1zgp-BohPWzhyPIMvdyBpfuje7yM_3jPi7fd0s2LphKk/edit?usp=sharing">Place your order!</Button>
+                                            {/* <button onClick={reset} type="button" className="btn_g mt-2">{renderText('btn_reset')}</button> */}
+                                            {/* <button onClick={downloadResult} className="btn_l ms-2 mt-2" type="button">{renderText('btn_download')}</button> */}
+                                        </div>
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
                     </div>
-                    <div className="position-absolute d-flex align-items-end logo_wrap">
-                        <h2>{renderText('title')}</h2>
+
+                    {/* Title */}
+                    <div className="position-absolute d-flex align-items-end logo_wrap p-1">
+                        <h1>Your Assembly Improv T-Shirt</h1>
                     </div>
+
                      <Footer />
                 </main>
+
                 <CustomModal
                     show={show}
                     handleClose={handleClose}
-                    resetModal={resetCanvasModal}
-                    addPhoto={addPhoto}
-                    title={modalTitle}
+                    addPhoto={downloadResult}
+                    resetModal={resetLogo}
+                    title="Customize Logo"
                     isSaveDisabled={uploadClipPath && !isCropped}
-                    saveText={renderText('modal_btn_save_change')}
-                    resetText={renderText('btn_reset')}
-                    tooptipText={renderText('modal_alert')}
+                    saveText="Download Image"
+                    resetText="Reset"
                     size="lg">
-                    <Form.Group  onChange={uploadPhoto} className={`mb-3 ${uploadImage ? 'd-none' : ''}`}>
-                        <Form.Control type="file" id="imageUpload" accept="image/*"/>
-                    </Form.Group>
-                   <div>{renderClipIcon()}</div>
-                   <canvas id="canvasModal" className="mx-auto"></canvas>
+
+                    <div className="d-flex">
+                        <div className="model-input">
+                            <h3 className="mb-2">Light Color:</h3>
+                            <label id="colorPicker"></label>
+                            <input id="colorPicker" type="color" value={lightColor} onChange={(e) => setLightColor(e.target.value)}
+                                style={{ height: '35px', width: '35px' }} className="mx-2" />
+                        </div>
+
+                        <div className="model-input">
+                            <h3 className="mb-2">Outline Color:</h3>
+                            <input type="color" value={outlineColor} onChange={(e) => setOutlineColor(e.target.value)}
+                                style={{ height: '35px', width: '35px' }} className="mx-2" />
+                        </div>
+                    </div>
+
+                    <LogoWhiteComponent className="position-absolute logo" lightcolor={lightColor} outlinecolor={outlineColor}></LogoWhiteComponent>
+
                 </CustomModal>
+
             </div>
         )
 

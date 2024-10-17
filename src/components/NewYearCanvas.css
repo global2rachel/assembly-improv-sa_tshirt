@@ -15,7 +15,8 @@
 }
 
 body {
-  background: #a60321;
+  background: black;
+  /* new year red: a60321 */
   color: #1b2440;
   font-family: 'Noto Sans TC', 'Open Sans', sans-serif;
 }
@@ -35,24 +36,31 @@ h5 {
 }
 
 h1 {
-  font-size: 4rem;
+  font-size: 2rem;
   font-weight: 700;
+  text-wrap: pretty;
+  text-align: center;
 }
 
 h2 {
-  font-size: 2rem;
+  font-size: 1rem;
   color: #f2b705;
   margin-bottom: 0;
 }
 
 @media (max-width: 768px) {
+h1 {
+  font-size: 1rem;
+}
+
   h2 {
     font-size: 1rem;
   }
 }
 
 h3 {
-  font-size: 2.5rem;
+  display: inline;
+  font-size: 1rem;
 }
 
 h4 {
@@ -716,4 +724,32 @@ p {
   width: 4rem;
   height: 4rem;
   border-radius: 50%;
+}
+
+.logo {
+left: 50%;
+top: 50%;
+transform: translate(-50%, -50%);
+}
+
+
+.tshirt-color {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 1px solid black;
+  cursor: pointer;
+  margin: 0 2px 2px 0;
+}
+
+.nav-container {
+  margin-top: auto;
+}
+
+.model-input {
+  width: fit-content;
+}
+
+.mockup-logo {
+  width: 20vw;
 }

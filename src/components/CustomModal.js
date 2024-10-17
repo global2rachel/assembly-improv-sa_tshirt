@@ -42,7 +42,6 @@ const CustomModal = (props)=>{
                         data-bs-dismiss="modal">{props.resetText}</button>
             
             {renderSaveButton()}
-           
         </Modal.Footer>
       </Modal>
     )
