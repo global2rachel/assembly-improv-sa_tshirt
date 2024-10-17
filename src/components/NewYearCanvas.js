@@ -282,9 +282,11 @@ const NewYearCanvas = (props)=>{
                             {/* Right */}
                             <div className={rightSecClass()} style={{height:'500px'}}>
 
-                                <h3>Logo Type:</h3>
+                                <h3>Select a Logo Type:</h3>
                                 <div className="mt-3">
                                     {renderLogos()}
+
+                                    <h3 className="ms-2">or edit a logo:</h3>
                                     <button onClick={()=>showModal('photo')} type="button" className="btn_f mx-4" data-bs-toggle="modal"
                                             data-bs-target="#exampleModal">
                                             Edit Logo
@@ -338,7 +340,7 @@ const NewYearCanvas = (props)=>{
                     isSaveDisabled={uploadClipPath && !isCropped}
                     saveText="Download Image"
                     resetText="Reset"
-                    size="lg">
+                    size="sm">
 
                     <div className="d-flex">
                         <div className="model-input">
@@ -363,7 +365,5 @@ const NewYearCanvas = (props)=>{
         )
 
 }
-
-
 
 export default NewYearCanvas
