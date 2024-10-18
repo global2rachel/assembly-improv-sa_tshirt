@@ -13,12 +13,17 @@ import { Canvg } from 'canvg';
 import { Button } from 'react-bootstrap';
 
 const NewYearCanvas = (props)=>{
+
+    // These parts need to be cleaned
     const [language, setLanguage] = useState({});
     const [canvas, setCanvas] = useState('');
     const [canvasModal, setCanvasModal] = useState('');
-    const [uploadImage, setUploadImage] = useState('');
     const [uploadClipPath, setUploadClipPath] = useState('');
     const [isCropped, setIsCropped] = useState(false);
+
+
+
+    const [uploadImage, setUploadImage] = useState('');
 
     const [color, setColor] = useState('#000000');
     const [colorName, setColorName] = useState('black');
@@ -35,6 +40,7 @@ const NewYearCanvas = (props)=>{
     const [outlineColor,setOutlineColor] = useState(null);
 
     const canvasDefaultWidth = 300;
+
     const showModal = (type)=> {
         setModalType(type);
         type ==='bg' ? setModalTitle(renderText('btn_add_bg')):setModalTitle(renderText('btn_add_photo'));
@@ -46,18 +52,9 @@ const NewYearCanvas = (props)=>{
     const windowSize = useWindowSize();
 
     useEffect(()=>{
-
-        // if(!document.querySelector('.modal-body')) return
-
-        // let canvasWidth = windowSize.isMobile ? windowSize.width*0.8 : 400;
-
-        // const canvasModal = new fabric.Canvas('canvasModal', {
-        //     width: canvasWidth,
-        //     height: canvasWidth,
-        // })
-        // setCanvasModal(canvasModal)
-
-    },[show, windowSize])
+        setLogo("4-2_outline-white_bg-na_light-yellow");
+        setLogoSrc("./images/logo/4-2_outline-white_bg-na_light-yellow.png");
+    })
 
     const reset = ()=>{
         canvas.clear();
@@ -263,6 +260,46 @@ const NewYearCanvas = (props)=>{
         )
     }
 
+    const renderModalContent = ()=>{
+
+        if(modalType === 'placeOrder'){
+            return (
+                <>
+                <strong>T-shirt Color:</strong> {colorName} <br/>
+                <strong>Logo Name:</strong>  {logoType} <br/>
+                ⚠️ If it's a custom logo, please upload your logo <a target="_blank" href="https://drive.google.com/drive/folders/16ODIUbPkzJND2t9iOfV2cQVgdDD0Jn7U?usp=sharing">here</a>,
+                and specify the logo name in the note column.
+                <hr/>
+                <iframe width="100%" height="90%" src="https://docs.google.com/spreadsheets/d/1zgp-BohPWzhyPIMvdyBpfuje7yM_3jPi7fd0s2LphKk/edit?usp=sharing?widget=true&amp;headers=false"></iframe>
+                </>
+            )
+        }
+
+        else if(modalType === 'editLogo') {
+            return (
+                <>           <div className="d-flex">
+                           <div className="model-input">
+                               <h3 className="mb-2">Light Color:</h3>
+                               <label id="colorPicker"></label>
+                               <input id="colorPicker" type="color" value={lightColor} onChange={(e) => setLightColor(e.target.value)}
+                                   style={{ height: '35px', width: '35px' }} className="mx-2" />
+                           </div>
+    
+                           <div className="model-input">
+                               <h3 className="mb-2">Outline Color:</h3>
+                               <input type="color" value={outlineColor} onChange={(e) => setOutlineColor(e.target.value)}
+                                   style={{ height: '35px', width: '35px' }} className="mx-2" />
+                           </div>
+                       </div>
+    
+                       <LogoWhiteComponent className="position-absolute logo" lightcolor={lightColor} outlinecolor={outlineColor}></LogoWhiteComponent>
+                </>
+            )
+        }
+
+        else return 'Please try again.';
+    }
+
         return(
             <div>
                 <main className="custom container-fluid position-relative">
@@ -282,38 +319,40 @@ const NewYearCanvas = (props)=>{
                             {/* Right */}
                             <div className={rightSecClass()} style={{height:'500px'}}>
 
-                                <h3>Select a Logo Type:</h3>
-                                <div className="mt-3">
+                                <h3>Select a logo:</h3>
+                                <div className="my-3">
                                     {renderLogos()}
-
-                                    <h3 className="ms-2">or edit a logo:</h3>
-                                    <button onClick={()=>showModal('photo')} type="button" className="btn_f mx-4" data-bs-toggle="modal"
-                                            data-bs-target="#exampleModal">
-                                            Edit Logo
-                                    </button>
                                 </div>
 
+                                <h3 className="ms-2">Customize a logo:</h3>
+                                <button onClick={()=>showModal('editLogo')} type="button" className="btn_f mx-4" data-bs-toggle="modal"
+                                            data-bs-target="#exampleModal">
+                                            Customize Logo
+                                </button>
+
                                 <div className="my-2">
-                                    <h3>Upload your logo:</h3>
+                                    <h3>Upload a logo:</h3>
                                     <Form.Group  onChange={uploadPhoto} className="mt-3">
                                         <Form.Control type="file" id="imageUpload" accept="image/*"/>
                                     </Form.Group>
                                 </div>
 
-                                <h3 className="mb-2">T-shirt Color:</h3>
+                                <hr/>
+
+                                <h3 className="mb-2">Select a t-shirt color:</h3>
                                 <div className={thumbnailClass()}>
                                     { renderTshirtColors() }
                                 </div>
 
+                                <hr/>
+
                                 <div className="d-flex flex-column align-items-start mt-4">
                                     <div>
-                                        <h3>Your Assembly Improv T-shirt Order</h3><br/>
-                                        T-shirt Color: {colorName} <br/>
-                                        Logo Name: {logoType}
+                                        <h2>Your Assembly Improv T-shirt Order</h2><br/>
+                                        <strong>T-shirt Color:</strong> {colorName} <br/>
+                                        <strong>Logo Name:</strong>  {logoType}
                                         <div className="d-flex flex-wrap mt-2">
-                                            <Button size ="lg" type="button" className="mt-2" target="_blank" href="https://docs.google.com/spreadsheets/d/1zgp-BohPWzhyPIMvdyBpfuje7yM_3jPi7fd0s2LphKk/edit?usp=sharing">Place your order!</Button>
-                                            {/* <button onClick={reset} type="button" className="btn_g mt-2">{renderText('btn_reset')}</button> */}
-                                            {/* <button onClick={downloadResult} className="btn_l ms-2 mt-2" type="button">{renderText('btn_download')}</button> */}
+                                            <Button size ="lg" type="button" className="mt-2" onClick={()=>showModal('placeOrder')}>Place your order!</Button>
                                         </div>
 
                                     </div>
@@ -333,34 +372,20 @@ const NewYearCanvas = (props)=>{
 
                 <CustomModal
                     show={show}
+                    noFooter={modalType === 'editLogo' ? false : true}
                     handleClose={handleClose}
                     addPhoto={downloadResult}
                     resetModal={resetLogo}
-                    title="Customize Logo"
+                    height={ modalType === 'editLogo' ? '' : '85vh'}
+                    title={ modalType === 'editLogo' ? 'Customize Logo' : 'Fill out your order'}
                     isSaveDisabled={uploadClipPath && !isCropped}
-                    saveText="Download Image"
+                    saveText="Download Logo"
                     resetText="Reset"
-                    size="sm">
-
-                    <div className="d-flex">
-                        <div className="model-input">
-                            <h3 className="mb-2">Light Color:</h3>
-                            <label id="colorPicker"></label>
-                            <input id="colorPicker" type="color" value={lightColor} onChange={(e) => setLightColor(e.target.value)}
-                                style={{ height: '35px', width: '35px' }} className="mx-2" />
-                        </div>
-
-                        <div className="model-input">
-                            <h3 className="mb-2">Outline Color:</h3>
-                            <input type="color" value={outlineColor} onChange={(e) => setOutlineColor(e.target.value)}
-                                style={{ height: '35px', width: '35px' }} className="mx-2" />
-                        </div>
-                    </div>
-
-                    <LogoWhiteComponent className="position-absolute logo" lightcolor={lightColor} outlinecolor={outlineColor}></LogoWhiteComponent>
+                    size={ modalType === 'editLogo' ? 'sm' : 'lg'}>
+                    
+                    { renderModalContent() }
 
                 </CustomModal>
-
             </div>
         )
 
