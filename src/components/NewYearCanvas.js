@@ -329,6 +329,19 @@ const NewYearCanvas = (props)=>{
                             </div>
                             {/* Right */}
                             <div className={rightSecClass()} style={{height:'500px'}}>
+                                <div className="d-flex flex-column align-items-start mt-4">
+                                    <div>
+                                        <h2>Your Assembly Improv T-shirt Order</h2><br/>
+                                        <strong>T-shirt Color:</strong> {colorName} <br/>
+                                        <strong>Logo Name:</strong>  {logoType}
+                                        <div className="d-flex flex-wrap mt-2">
+                                            <Button size ="lg" type="button" className="mt-2" onClick={()=>showModal('placeOrder')}>Place your order!</Button>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <hr />
 
                                 <h3>Select a logo:</h3>
                                 <div className="my-3">
@@ -355,19 +368,6 @@ const NewYearCanvas = (props)=>{
                                     { renderTshirtColors() }
                                 </div>
 
-                                <hr/>
-
-                                <div className="d-flex flex-column align-items-start mt-4">
-                                    <div>
-                                        <h2>Your Assembly Improv T-shirt Order</h2><br/>
-                                        <strong>T-shirt Color:</strong> {colorName} <br/>
-                                        <strong>Logo Name:</strong>  {logoType}
-                                        <div className="d-flex flex-wrap mt-2">
-                                            <Button size ="lg" type="button" className="mt-2" onClick={()=>showModal('placeOrder')}>Place your order!</Button>
-                                        </div>
-
-                                    </div>
-                                </div>
                             </div>
                         </div>
 
