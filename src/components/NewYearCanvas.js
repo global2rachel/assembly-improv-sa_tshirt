@@ -273,7 +273,6 @@ const NewYearCanvas = (props)=>{
     }
 
     const renderModalContent = ()=>{
-
         if(modalType === 'placeOrder'){
             return (
                 <>
@@ -281,7 +280,7 @@ const NewYearCanvas = (props)=>{
                 <strong>T-shirt Color:</strong> {colorName} <br/>
                 <strong>Logo Name:</strong>  {logoType}
                 <hr /> */}
-                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSe26zL97lrisPPV_01j5Dup3c7_7g8L5TRLV9K3JDEJzKUePw/viewform?embedded=true" width="640" height="2334" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSe26zL97lrisPPV_01j5Dup3c7_7g8L5TRLV9K3JDEJzKUePw/viewform?embedded=true" width={windowSize.width > '768' ? '640' : '100%'} height="100%" frameBorder="0" marginHeight="0" marginWidth="0">Loading…</iframe>
             
                 </>
                 )
