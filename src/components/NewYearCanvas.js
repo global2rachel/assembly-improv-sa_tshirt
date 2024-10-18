@@ -30,8 +30,9 @@ const NewYearCanvas = (props)=>{
 
     const [show,setShow] = useState(false);
 
-    const [logoType, setLogo] = useState(null);
-    const [logoSrc, setLogoSrc] = useState('');
+    const [logoType, setLogo] = useState('4-2_outline-white_bg-na_light-yellow');
+    const [logoSrc, setLogoSrc] = useState('./images/logo/4-2_outline-white_bg-na_light-yellow.png');
+
 
     const [modalType,setModalType] = useState('');
     const [modalTitle,setModalTitle] = useState('');
@@ -50,11 +51,6 @@ const NewYearCanvas = (props)=>{
         setShow(false);
     }
     const windowSize = useWindowSize();
-
-    useEffect(()=>{
-        setLogo("4-2_outline-white_bg-na_light-yellow");
-        setLogoSrc("./images/logo/4-2_outline-white_bg-na_light-yellow.png");
-    })
 
     const reset = ()=>{
         canvas.clear();
@@ -84,6 +80,15 @@ const NewYearCanvas = (props)=>{
                 <img onClick={()=>setLogoAttribute(image)} role="button" key={image.alt} src={image.src} className="img-thumbnail sticker" alt={image.alt} />
             )
         })
+        // return props.stickers.map(image=>{
+        //     return (
+        //         <div className="d-flex column align-center">
+        //             <img onClick={()=>setLogoAttribute(image)} role="button" key={image.alt} src={image.src} className="img-thumbnail sticker" alt={image.alt} />
+        //             { image.alt }
+        //         </div>
+                
+        //     )
+        // })
     }
 
     const setLogoAttribute = (image)=>{
@@ -239,6 +244,13 @@ const NewYearCanvas = (props)=>{
                 <div onClick={()=>setShirtColor(colorItem)} key={index} className="tshirt-color" style={{backgroundColor: colorItem.colorCode}}></div>
             )
         });
+        // return props.colors.map((colorItem, index)=>{
+        //     return (
+        //         <div className="d-flex column align-center">
+        //         <div onClick={()=>setShirtColor(colorItem)} key={index} className="tshirt-color" style={{backgroundColor: colorItem.colorCode}}></div>
+        //         { colorItem.colorName }</div>
+        //     )
+        // });
     }
 
     const setShirtColor = (colorItem)=>{
@@ -265,14 +277,14 @@ const NewYearCanvas = (props)=>{
         if(modalType === 'placeOrder'){
             return (
                 <>
+                {/* <h2>Your Assembly Improv T-shirt Order</h2><br/>
                 <strong>T-shirt Color:</strong> {colorName} <br/>
-                <strong>Logo Name:</strong>  {logoType} <br/>
-                ⚠️ If it's a custom logo, please upload your logo <a target="_blank" href="https://drive.google.com/drive/folders/16ODIUbPkzJND2t9iOfV2cQVgdDD0Jn7U?usp=sharing">here</a>,
-                and specify the logo name in the note column.
-                <hr/>
-                <iframe width="100%" height="90%" src="https://docs.google.com/spreadsheets/d/1zgp-BohPWzhyPIMvdyBpfuje7yM_3jPi7fd0s2LphKk/edit?usp=sharing?widget=true&amp;headers=false"></iframe>
+                <strong>Logo Name:</strong>  {logoType}
+                <hr /> */}
+                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSe26zL97lrisPPV_01j5Dup3c7_7g8L5TRLV9K3JDEJzKUePw/viewform?embedded=true" width="640" height="2334" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+            
                 </>
-            )
+                )
         }
 
         else if(modalType === 'editLogo') {
@@ -376,6 +388,8 @@ const NewYearCanvas = (props)=>{
                     handleClose={handleClose}
                     addPhoto={downloadResult}
                     resetModal={resetLogo}
+                    colorName={colorName}
+                    logoType={logoType}
                     height={ modalType === 'editLogo' ? '' : '85vh'}
                     title={ modalType === 'editLogo' ? 'Customize Logo' : 'Fill out your order'}
                     isSaveDisabled={uploadClipPath && !isCropped}
