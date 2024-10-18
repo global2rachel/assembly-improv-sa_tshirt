@@ -4,28 +4,17 @@ import {Modal} from "react-bootstrap";
 
 const CustomModal = (props)=>{
 
-  const renderSaveButton = ()=>{
+  const renderFooter = ()=>{
 
-    const html = (isDisabled)=>{
-      return (
-        <button onClick={props.addPhoto} type="button" className="btn btn-primary" disabled={isDisabled}
-    data-bs-dismiss="modal">{props.saveText}</button>
-      )
-    } 
-
-    if(!props.isSaveDisabled) return (
-      html(false)
-    )
-
+    if(!!props.noFooter) return;
     return (
-      <div className="tooltipwrapper position-relative">
-            <span className="tooltiptext">{props.tooptipText}</span>
-          
-            {html(true)}
-      </div>
-         
-    )
-
+      <Modal.Footer>
+<button onClick={props.resetModal} type="button" className="btn btn-secondary"
+                        data-bs-dismiss="modal">{props.resetText}</button>
+        <button onClick={props.addPhoto} type="button" className="btn btn-primary"
+    data-bs-dismiss="modal">{props.saveText}</button>
+        </Modal.Footer>
+      )
   }
 
 
@@ -34,15 +23,10 @@ const CustomModal = (props)=>{
         <Modal.Header closeButton>
           <Modal.Title>{props.title}</Modal.Title>
         </Modal.Header>
-        <Modal.Body style={{overflow: 'scroll'}}>
+        <Modal.Body style={{overflow: 'scroll', height: props.height}}>
             {props.children}
         </Modal.Body>
-        <Modal.Footer>
-             <button onClick={props.resetModal} type="button" className="btn btn-secondary"
-                        data-bs-dismiss="modal">{props.resetText}</button>
-            
-            {renderSaveButton()}
-        </Modal.Footer>
+        {renderFooter()}
       </Modal>
     )
 }
