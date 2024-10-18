@@ -18,7 +18,7 @@ const CustomModal = (props)=>{
   }
 
   const renderTitle = ()=>{
-    if(props.colorName ||  props.logoType) return (
+    if(props.noFooter) return (
       <>
       
       <h2>Your Assembly Improv T-shirt Order</h2><br/>
