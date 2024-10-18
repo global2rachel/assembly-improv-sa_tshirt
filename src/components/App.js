@@ -9,16 +9,16 @@ function App() {
   },[])
 
   const clothColors = [
-      { colorName: "Baby Pink (end of range)", colorCode: "#FFC0CB" },
+      { colorName: "Baby Pink", colorCode: "#FFC0CB" },
       { colorName: "Black", colorCode: "#000000" },
       { colorName: "Bottle Green", colorCode: "#345C4D" },
-      { colorName: "Brown (end of range)", colorCode: "#6F3000" },
+      { colorName: "Brown", colorCode: "#6F3000" },
       { colorName: "Emerald", colorCode: "#0F6060" },
       { colorName: "Grey", colorCode: "#808080" },
       { colorName: "Hot pink", colorCode: "#FF3090" },
       { colorName: "Lime", colorCode: "#9AC151" },
       { colorName: "Maroon", colorCode: "#800000" },
-      { colorName: "Natural (end of range)", colorCode: "#FFF0C0" },
+      { colorName: "Natural", colorCode: "#FFF0C0" },
       { colorName: "Navy", colorCode: "#121F42" },
       { colorName: "Olive", colorCode: "#6F6030" },
       { colorName: "Orange", colorCode: "#FF8C00" },
