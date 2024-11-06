@@ -6,7 +6,7 @@ const Footer = (props)=>{
             <a type="button" className="text-center mt-2 text-white" href="https://www.theassemblyimprov.co.za/" target="_blank" rel="noreferrer">Copyright
                 © The Assembly Improv SA</a>
 <h3 className="text-center mt-2 text-white"> | 
-Made with ❤️ by Rachel & ChapGPT</h3>
+Made with ❤️ by Rachel & ChatGPT</h3>
         </div>
     )
 }
