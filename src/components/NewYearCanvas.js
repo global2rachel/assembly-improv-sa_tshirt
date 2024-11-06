@@ -219,7 +219,7 @@ const NewYearCanvas = (props)=>{
                 document.documentElement.clientWidth ||
                 document.body.clientWidth
         return (
-            `col-md-4 col-12 flex-column ${width > 767 ? 'mt-5 pt-5' : 'mt-4'} px-2`
+            `col-md-4 col-12 flex-column ${width > 767 ? 'pt-5' : 'mt-2'} px-2`
         )
     }
 
@@ -329,13 +329,17 @@ const NewYearCanvas = (props)=>{
                             </div>
                             {/* Right */}
                             <div className={rightSecClass()} style={{height:'500px'}}>
-                                <div className="d-flex flex-column align-items-start mt-4">
+                                <div className="d-flex flex-column align-items-start">
                                     <div>
-                                        <h2>Your Assembly Improv T-shirt Order</h2><br/>
+                                        <h2>Your Assembly Improv T-shirt</h2><br/>
                                         <strong>T-shirt Color:</strong> {colorName} <br/>
                                         <strong>Logo Name:</strong>  {logoType}
                                         <div className="d-flex flex-wrap mt-2">
-                                            <Button size ="lg" type="button" className="mt-2" onClick={()=>showModal('placeOrder')}>Place your order!</Button>
+                                            {/* <Button size ="lg" type="button" className="mt-2" onClick={()=>showModal('placeOrder')}>Place your order!</Button> */}
+                                            <div class="alert alert-danger" role="alert">
+                                                Make sure your file type & size are correct. <a target="_blank" href="https://www.oneoff.co.za/page/faq">See file requirements here.</a>
+                                            </div>
+                                            <Button size ="lg" type="button" className="mt-2" href="https://www.oneoff.co.za/designer/customize/209781398?bt=3&dpid=1" target="_blank">Place your order!</Button>
                                         </div>
 
                                     </div>
@@ -346,6 +350,7 @@ const NewYearCanvas = (props)=>{
                                 <h3>Select a logo:</h3>
                                 <div className="my-3">
                                     {renderLogos()}
+                                    <a href="https://drive.google.com/drive/folders/16ODIUbPkzJND2t9iOfV2cQVgdDD0Jn7U?usp=sharing" target="_blank"><button size ="sm" type="button" className="ms-2 mt-2">Download Logos</button></a>
                                 </div>
 
                                 <h3 className="ms-2">Customize a logo:</h3>
