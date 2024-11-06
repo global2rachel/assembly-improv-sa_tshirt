@@ -92,6 +92,10 @@ const NewYearCanvas = (props)=>{
     }
 
     const setLogoAttribute = (image)=>{
+        const imageContainer = document.getElementById('imageContainer');
+        // Clear previous images
+        imageContainer.innerHTML = '';
+
         setLogo(image.alt);
         setLogoSrc(image.src);
     }
@@ -244,13 +248,6 @@ const NewYearCanvas = (props)=>{
                 <div onClick={()=>setShirtColor(colorItem)} key={index} className="tshirt-color" style={{backgroundColor: colorItem.colorCode}}></div>
             )
         });
-        // return props.colors.map((colorItem, index)=>{
-        //     return (
-        //         <div className="d-flex column align-center">
-        //         <div onClick={()=>setShirtColor(colorItem)} key={index} className="tshirt-color" style={{backgroundColor: colorItem.colorCode}}></div>
-        //         { colorItem.colorName }</div>
-        //     )
-        // });
     }
 
     const setShirtColor = (colorItem)=>{
@@ -267,8 +264,8 @@ const NewYearCanvas = (props)=>{
         if(!logoType || logoType === 'custom-file') return;
         return (
             <div className="position-absolute logo">
-                                            <img className="mockup-logo" src={logoSrc} alt="logo"></img>
-                                        </div>
+                <img className="mockup-logo" src={logoSrc} alt="logo"></img>
+            </div>
         )
     }
 
