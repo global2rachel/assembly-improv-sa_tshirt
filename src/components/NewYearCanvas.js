@@ -336,7 +336,7 @@ const NewYearCanvas = (props)=>{
                                             <div class="alert alert-danger" role="alert">
                                                 Make sure your file type & size are correct. <a target="_blank" href="https://www.oneoff.co.za/page/faq">See file requirements here.</a>
                                             </div>
-                                            <Button size ="lg" type="button" className="mt-2" href="https://www.oneoff.co.za/designer/customize/209781398?bt=3&dpid=1" target="_blank">Place your order!</Button>
+                                            {/* <Button size ="lg" type="button" className="mt-2" href="https://www.oneoff.co.za/designer/customize/209781398?bt=3&dpid=1" target="_blank">Place your order!</Button> */}
                                         </div>
 
                                     </div>
